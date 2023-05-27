@@ -16,6 +16,11 @@ const initialState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
+  reducers: {
+    logout(state) {
+      state.data = null
+    },
+  },
   extraReducers: {
     [fetchAuth.pending]: (state) => {
       state.status = 'loading'
@@ -24,7 +29,6 @@ const authSlice = createSlice({
     [fetchAuth.fulfilled]: (state, action) => {
       state.status = 'fulfilled'
       state.data = action.payload
-      console.log(action.payload)
     },
     [fetchAuth.rejected]: (state) => {
       state.status = 'error'
@@ -33,4 +37,7 @@ const authSlice = createSlice({
   },
 })
 
+export const isAuthSelector = (state) => !!state.auth.data
 export const authReducer = authSlice.reducer
+
+export const { logout } = authSlice.actions
