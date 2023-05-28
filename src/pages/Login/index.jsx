@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Paper from '@mui/material/Paper'
@@ -26,8 +26,12 @@ export const Login = () => {
     mode: 'all',
   })
 
-  const onSubmit = (values) => {
-    dispatch(fetchAuth(values))
+  const onSubmit = async (values) => {
+    const data = await dispatch(fetchAuth(values))
+    if (!data.payload) return alert('Failed auth')
+    if ('token' in data.payload) {
+      localStorage.setItem('token', data.payload.token)
+    }
   }
 
   if (isAuth) {
@@ -55,7 +59,13 @@ export const Login = () => {
           helperText={errors.password?.message}
           {...register('password', { required: 'Password is required' })}
         />
-        <Button type="submit" size="large" variant="contained" fullWidth>
+        <Button
+          disabled={!isValid}
+          type="submit"
+          size="large"
+          variant="contained"
+          fullWidth
+        >
           Войти
         </Button>
       </form>

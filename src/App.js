@@ -3,8 +3,18 @@ import { Routes, Route } from 'react-router-dom'
 
 import { Header } from './components'
 import { Home, FullPost, Registration, AddPost, Login } from './pages'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { fetchAuthMe, isAuthSelector } from './redux/slices/authSlice'
 
 function App() {
+  const dispatch = useDispatch()
+  const isAuth = useSelector(isAuthSelector)
+
+  useEffect(() => {
+    dispatch(fetchAuthMe())
+  }, [])
+
   return (
     <>
       <Header />

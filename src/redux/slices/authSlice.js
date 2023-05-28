@@ -1,10 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { fetchLogin } from '../../services/auth'
+import { fetchLogin, fetchMe, fetchReg } from '../../services/auth'
 
-export const fetchAuth = createAsyncThunk(
-  'auth/fetchUserData',
+export const fetchAuth = createAsyncThunk('auth/fetchAuth', async (params) => {
+  return fetchLogin(params)
+})
+
+export const fetchAuthMe = createAsyncThunk('auth/fetchAuthMe', async () => {
+  return fetchMe()
+})
+export const fetchRegister = createAsyncThunk(
+  'auth/fetchRegister',
   async (params) => {
-    return fetchLogin(params)
+    return fetchReg(params)
   }
 )
 
@@ -31,6 +38,30 @@ const authSlice = createSlice({
       state.data = action.payload
     },
     [fetchAuth.rejected]: (state) => {
+      state.status = 'error'
+      state.data = null
+    },
+    [fetchAuthMe.pending]: (state) => {
+      state.status = 'loading'
+      state.data = null
+    },
+    [fetchAuthMe.fulfilled]: (state, action) => {
+      state.status = 'fulfilled'
+      state.data = action.payload
+    },
+    [fetchAuthMe.rejected]: (state) => {
+      state.status = 'error'
+      state.data = null
+    },
+    [fetchRegister.pending]: (state) => {
+      state.status = 'loading'
+      state.data = null
+    },
+    [fetchRegister.fulfilled]: (state, action) => {
+      state.status = 'fulfilled'
+      state.data = action.payload
+    },
+    [fetchRegister.rejected]: (state) => {
       state.status = 'error'
       state.data = null
     },
